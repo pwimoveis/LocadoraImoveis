@@ -13,12 +13,12 @@
 
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <center>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="funcionarios.jsp"> FUNCIONÁRIOS </a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultafuncionario.jsp"> FUNCIONÁRIOS </a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultacliente.jsp"> CLIENTES </a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="imoveis.jsp"> IMÓVEIS </a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="propostas.jsp"> PROPOSTAS </a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultaimovel.jsp"> IMÓVEIS </a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultaproposta.jsp"> PROPOSTAS </a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="pagamentos.jsp"> PAGAMENTOS </a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="contratos.jsp"> CONTRATOS </a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultacontrato.jsp"> CONTRATOS </a>
 </center>
 </body>
 </html>
