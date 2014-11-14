@@ -9,7 +9,7 @@
 <body>
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
-<center> <b> BEM VINDO! </b></center>
+<center> <b> BEM VINDO!! </b></center>
 
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <center>
