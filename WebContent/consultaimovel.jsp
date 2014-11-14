@@ -49,8 +49,6 @@
     <td> 10.000,00</td>
   </tr>
   </table>
-
-</table>
 </form>
 </body>
 </html>
