@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
- 	<center> <b><u> CONSULTAR CLIENTE </u></b></center> 
+ 	<center> <b><u> CONSULTAR FUNCIONÁRIO </u></b></center> 
 <br></br>
 <br></br>
 	<form action="" method="post">
@@ -19,19 +19,13 @@
 		<td> &nbsp;&nbsp;RG: </td>
 		<td><input type="text" size="35" name="rg"></td>
 	</tr>
-	<tr>
-		<td> &nbsp;&nbsp;CPF/CNPJ: </td>
-		<td><input type="text" size="35" name="cpfcnpj"></td>
-	</tr>
-
-	
-</table>
+	</table>
 <br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;
 	<input type="submit" value="Pesquisar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		<input type="button" value="Novo" onclick="location.href='cadastrocliente.jsp'">
+		<input type="button" value="Novo" onclick="location.href='cadastrofuncionario.jsp'">
 <br/><br/><br/><br/><br/>
 <table border="1">
 
@@ -39,46 +33,22 @@
     <th bgcolor="#EDEDED">Ação</th>
     <th bgcolor="#EDEDED">Nome</th>
     <th bgcolor="#EDEDED">RG</th>
-    <th bgcolor="#EDEDED">CPF/CNPJ</th>
+    <th bgcolor="#EDEDED">CPF</th>
+    <th bgcolor="#EDEDED">Data Nasc.</th>
     <th bgcolor="#EDEDED">Email</th>
-    <th bgcolor="#EDEDED">Telefone</th>
+    <th bgcolor="#EDEDED">Endereço</th>
   </tr>
   <tr>
     <td> OK </td>
     <td> Renato </td>
     <td> 1234556 </td>
     <td> 32948372 </td>
+    <td> 25/02/1989 </td>
     <td> renato@renato.com </td>
-    <td> 32083049 </td>
+    <td> Rua B </td>
   </tr>
   
-  <tr>
-    <td> OK </td>
-    <td> Renato </td>
-    <td> 1234556 </td>
-    <td> 32948372 </td>
-    <td> renato@renato.com </td>
-    <td> 32083049 </td>
-  </tr>
-  
-  <tr>
-    <td> OK </td>
-    <td> Renato </td>
-    <td> 1234556 </td>
-    <td> 32948372 </td>
-    <td> renato@renato.com </td>
-    <td> 32083049 </td>
-  </tr>
-  
-  <tr>
-    <td> OK </td>
-    <td> Renato </td>
-    <td> 1234556 </td>
-    <td> 32948372 </td>
-    <td> renato@renato.com </td>
-    <td> 32083049 </td>
-  </tr>
-</table>
+  </table>
 </form>
 </body>
 </html>
