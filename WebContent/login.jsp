@@ -7,7 +7,7 @@
 </head>
 <body> 
 <br/><br/><br/><br/><br/><br/><br/><br/>
-
+<body background="">
 	<center>
 	<img src="imagens/logopw.jpg">
 	<br/><br/><br/><br/><br/><br/>
