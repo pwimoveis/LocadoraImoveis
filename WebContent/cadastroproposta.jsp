@@ -40,7 +40,7 @@
 		&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Salvar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		 <input type="submit" value="Cancelar">
+		 <input type="submit" value="Cancelar" onclick="location.href='consultaproposta.jsp'">
 	</form>
 </body>
 </html>

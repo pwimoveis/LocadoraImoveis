@@ -32,7 +32,7 @@
 		&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Salvar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		 <input type="submit" value="Cancelar">
+		 <input type="submit" value="Cancelar" onclick="location.href='consultaimovel.jsp'">
 	</form>
 </body>
 </html>
