@@ -11,7 +11,7 @@
 	<center>
 	<img src="imagens/logopw.jpg">
 	<br/><br/><br/><br/><br/><br/>
-	<form action="" method="post">
+	<form action="loginservlet" method="post">
 		<table>
 			<tr>
 				<td> Login: </td>
