@@ -11,7 +11,17 @@
 	<center>
 	<img src="imagens/logopw.jpg">
 	<br/><br/><br/><br/><br/><br/>
+
 	<form action="loginservlet" method="post">
+		<font color="red" size="+1">
+			<%  
+			    if(null!=request.getAttribute("mensagemErro"))
+			    {
+			        out.println(request.getAttribute("mensagemErro"));
+			    }
+			%>
+		</font>
+		
 		<table>
 			<tr>
 				<td> Login: </td>
