@@ -6,50 +6,43 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
- 	<center> <b><u> CONSULTAR CONTRATO </u></b></center> 
+ 	<center> <b><u> CONSULTAR PAGAMENTO </u></b></center> 
 <br></br>
 <br></br>
 	<form action="" method="post">
 	<table>
 	<tr>
-		<td> &nbsp;&nbsp;Cliente: </td>
-		<td><input type="text" size="35" name="cliente"></td>
-	</tr>
-	<tr>
-		<td> &nbsp;&nbsp;Número: </td>
+		<td> &nbsp;&nbsp;Número Contrato: </td>
 		<td><input type="text" size="35" name="numcontrato"></td>
 	</tr>
-	</table>
+	
+	
+</table>
 <br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;
 	<input type="submit" value="Pesquisar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		<input type="button" value="Novo" onclick="location.href='cadastrocontrato.jsp'">
+		<input type="button" value="Novo" onclick="location.href='cadastropagamento.jsp'">
 <br/><br/><br/><br/><br/>
 <table border="1">
 
   <tr>
     <th bgcolor="#EDEDED">Ação</th>
-    <th bgcolor="#EDEDED">Número</th>
-    <th bgcolor="#EDEDED">Funcionário</th>
-    <th bgcolor="#EDEDED">Cliente</th>
-    <th bgcolor="#EDEDED">CPF</th>
-    <th bgcolor="#EDEDED">Data Início.</th>
-    <th bgcolor="#EDEDED">Data Fim</th>
-    <th bgcolor="#EDEDED">Valor</th>
+    <th bgcolor="#EDEDED">Número Contrato</th>
+    <th bgcolor="#EDEDED">Data Vencimento</th>
+    <th bgcolor="#EDEDED">Data Pagamento</th>
+    <th bgcolor="#EDEDED">Pago</th>
+    
   </tr>
   <tr>
     <td> OK </td>
-    <td> 01</td>
-    <td> Alex </td>
-    <td> Fernando </td>
-    <td> 25000909 </td>
-    <td> 14/11/14 </td>
-    <td> 01/01/15 </td>
-    <td> 5.000,00</td>
+    <td> 12345 </td>
+    <td> 25/11/2014 </td>
+    <td> 24/11/2014 </td>
+    <td> SIM </td>
+    
   </tr>
-  
   </table>
 </form>
 </body>

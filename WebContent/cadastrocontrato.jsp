@@ -6,33 +6,33 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-<center> <b><u> CADASTRO DE PROPOSTA </u></b></center> 
+<center> <b><u> CADASTRO DE CONTRATO </u></b></center> 
 <br></br>
 	<form action="" method="post">
 		<table>
 			<tr>
+				<td> &nbsp;&nbsp;Número: </td>
+				<td><input type="text" size="35" name="numcontrato">
+			</tr>
+			<tr>
+				<td> &nbsp;&nbsp;Funcionário: </td>
+				<td><input type="text" size="35" name="nomefunc"></td>
+			</tr>
+			<tr>
 				<td> &nbsp;&nbsp;Cliente: </td>
-				<td><input type="text" size="35" name="codigoimovel">
+				<td><input type="text" size="35" name="nome">
 			</tr>
 			<tr>
-				<td> &nbsp;&nbsp;Corretor: </td>
-				<td><input type="text" size="35" name="enderecoimovel"></td>
+				<td> &nbsp;&nbsp;Data Início: </td>
+				<td><input type="text" size="35" name="datainicio"></td>
 			</tr>
 			<tr>
-				<td> &nbsp;&nbsp;Data início: </td>
-				<td><input type="text" size="35" name="datainicio">
-			</tr>
-			<tr>
-				<td> &nbsp;&nbsp;Venc/Proposta: </td>
-				<td><input type="text" size="35" name="vencproposta"></td>
+				<td> &nbsp;&nbsp;Data Fim: </td>
+				<td><input type="text" size="35" name="datafim"></td>
 			</tr>
 			<tr>
 				<td> &nbsp;&nbsp;Valor: </td>
 				<td><input type="text" size="35" name="valor"></td>
-			</tr>
-			<tr>
-				<td> &nbsp;&nbsp;Desconto: </td>
-				<td><input type="text" size="35" name="desconto"></td>
 			</tr>
 		</table>
 		<br><br>
@@ -40,7 +40,7 @@
 		&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Salvar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		 <input type="submit" value="Cancelar" onclick="location.href='consultaproposta.jsp'">
+		 <input type="submit" value="Cancelar" onclick="location.href='consultacontrato.jsp'">
 	</form>
 </body>
 </html>
