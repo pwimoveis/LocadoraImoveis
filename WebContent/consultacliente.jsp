@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
- 	<center> <b><u> CONSULTAR CLIENTE </u></b></center> 
+<a href="login.jsp"> SAIR </a> 	<center> <b><u> CONSULTAR CLIENTE </u></b></center> 
 <br></br>
 <br></br>
 	<form action="" method="post">
@@ -32,6 +32,9 @@
 	<input type="submit" value="Pesquisar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
 		<input type="button" value="Novo" onclick="location.href='cadastrocliente.jsp'">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" value="Voltar" onclick="location.href='home.jsp'">
 <br/><br/><br/><br/><br/>
 <table border="1">
 

@@ -7,6 +7,7 @@
 
 </head>
 <body>
+<a href="login.jsp"> SAIR </a>
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 <center> <b> BEM VINDO!! </b></center>
@@ -19,6 +20,9 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultaproposta.jsp"> PROPOSTAS </a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultapagamento.jsp"> PAGAMENTOS </a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="consultacontrato.jsp"> CONTRATOS </a>
+
+
+
 </center>
 </body>
 </html>

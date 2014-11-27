@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-<center> <b><u> CADASTRO DE PAGAMENTO </u></b></center> 
+<a href="login.jsp"> SAIR </a><center> <b><u> CADASTRO DE PAGAMENTO </u></b></center> 
 <br></br>
 	<form action="" method="post">
 		<table>
@@ -48,7 +48,7 @@
 		&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Salvar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		 <input type="submit" value="Cancelar" onclick="location.href='consultapagamento.jsp'">
+		 <input type="button" value="Cancelar" onclick="location.href='consultapagamento.jsp'">
 	</form>
 </body>
 </html>

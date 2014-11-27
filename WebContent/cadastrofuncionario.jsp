@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-<center> <b><u> CADASTRO DE FUNCIONÁRIO </u></b></center> 
+<a href="login.jsp"> SAIR </a><center> <b><u> CADASTRO DE FUNCIONÁRIO </u></b></center> 
 <br></br>
 	<form action="" method="post">
 		<table>
