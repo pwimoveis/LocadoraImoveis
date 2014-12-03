@@ -1,0 +1,4 @@
+/////////////////////////////////////
+///Alex [03/12/2014]
+- Execute os arquivos/scripts na base de dados [script.txt e sequence.txt] esses dois
+arquivos estão no projeto

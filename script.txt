@@ -1,0 +1,110 @@
+create table CLIENTE
+(
+	ID integer,
+	TIPO_PESSOA character (1),
+	NOME varchar (50),
+	RG varchar (9),
+	CPF_CNPJ varchar (18),
+	ENDERECO varchar (255),
+	EMAIL varchar (100),
+	TELEFONE varchar(15),
+	DATA_NASC date,
+	CONSTRAINT cliente_pk PRIMARY KEY (ID)
+);
+
+create table FUNCIONARIO
+(
+	ID integer,
+	NOME varchar (50),
+	RG varchar (9),
+	CPF varchar (11),
+	DATA_NASC date,
+	ENDERECO varchar (255),
+	TELEFONE varchar (15),
+	LOGIN varchar (30),
+	SENHA varchar (16),
+	EMAIL varchar (100),
+	CONSTRAINT funcionario_id_pk PRIMARY KEY (ID)
+);
+
+create table STATUS
+(
+	ID integer,
+	DESCRICAO varchar (20),
+	CONSTRAINT status_id_pk PRIMARY KEY (ID)
+);
+
+create table PROPOSTA
+(
+	ID integer,
+	ID_CLIENTE integer,
+	ID_FUNCIONARIO integer,
+	DATA_VENC_PROPOSTA date,
+	DATA_INICIO date,
+	DATA_FIM date,
+	VALOR numeric (6,2),
+	DESCONTO numeric (6,2),
+	DATA_PROPOSTA date,
+	CONSTRAINT proposta_pk PRIMARY KEY (ID),
+	CONSTRAINT cliente_proposta_fk FOREIGN KEY (ID_CLIENTE) references CLIENTE (ID),
+	CONSTRAINT funcionario_proposta_fk FOREIGN KEY (ID_FUNCIONARIO) references FUNCIONARIO (ID)
+);
+
+create table CONTRATO
+(
+	ID integer,
+	NUMERO integer,
+	ID_FUNCIONARIO integer,
+	ID_CLIENTE integer,
+	DATA_INICIO date,
+	DATA_FIM date,
+	VALOR numeric (6,2),
+	CONSTRAINT contrato_pk PRIMARY KEY (ID),
+	CONSTRAINT funcionario_contrato_fk FOREIGN KEY (ID_FUNCIONARIO) references FUNCIONARIO (ID),
+	CONSTRAINT cliente_contrato_fk FOREIGN KEY (ID_CLIENTE) references CLIENTE (ID)
+);
+
+create table IMOVEL
+(
+	ID integer,
+	TIPO_IMOVEL integer,
+	ENDERECO varchar (255),
+	DESCRICAO varchar (255),
+	COMODOS integer,
+	ID_STATUS integer,
+	CONSTRAINT imovel_pk PRIMARY KEY (ID),
+	CONSTRAINT status_imovel_fk FOREIGN KEY (ID_STATUS) references STATUS (ID)
+);
+
+create table PAGAMENTO
+(
+	ID integer,
+	TIPO_PAGAMENTO varchar(30),
+	DATA_VENCIMENTO date,
+	DATA_PAGAMENTO date,
+	VALOR_ORIGINAL numeric (6,2),
+	VALOR_PAGO numeric (6,2),
+	PAGO numeric (1),
+	ID_CONTRATO integer,
+	CONSTRAINT pagamento_id_pk PRIMARY KEY (ID),
+	CONSTRAINT contrato_pagamento_fk FOREIGN KEY (ID_CONTRATO) references CONTRATO (ID)
+);
+
+create table PROPOSTA_IMOVEL
+(
+	ID integer,
+	ID_IMOVEL integer,
+	ID_PROPOSTA integer,
+	CONSTRAINT propostaimovel_pk PRIMARY KEY (ID),
+	CONSTRAINT imovel_propostaimovel_fk FOREIGN KEY (ID_IMOVEL) references IMOVEL (ID),
+	CONSTRAINT proposta_propostaimovel_fk FOREIGN KEY (ID_PROPOSTA) references PROPOSTA (ID)
+);
+
+-- drop table CLIENTE;
+-- drop table FUNCIONARIO;
+-- drop table STATUS;
+-- drop table PROPOSTA;
+-- drop table CONTRATO;
+-- drop table IMOVEL;
+-- drop table PAGAMENTO;
+-- drop table PROPOSTA_IMOVEL;
