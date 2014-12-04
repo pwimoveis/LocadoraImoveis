@@ -10,6 +10,7 @@ import java.util.List;
 import br.com.model.Cliente;
 import br.com.model.Funcionario;
 import br.com.model.Imovel;
+import br.com.model.Proposta;
 import br.com.utils.DataUtil;
 
 public class ConexaoBD {
@@ -341,6 +342,164 @@ public class ConexaoBD {
 		int registroInserido = prepared.executeUpdate();
 		prepared.close();
 		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	///PROPOSTA
+	public List<Proposta> consultaProposta(String cliente, String corretor) throws SQLException
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM proposta AS pro");
+		
+		if(cliente!=null && cliente.trim().length()>0)
+		{ query.append(", cliente AS cli"); }
+		
+		if(corretor!=null && corretor.trim().length()>0)
+		{ query.append(", funcionario AS fun"); }
+		
+		query.append(" WHERE pro.id IS NOT NULL");
+		
+		if(cliente!=null && cliente.trim().length()>0)
+		{ 
+			query.append(" AND cli.id=pro.id_cliente");
+			query.append(" AND UPPER(cli.nome) LIKE UPPER('%" + cliente + "%')"); 
+		}
+		if(corretor!=null && corretor.trim().length()>0)
+		{ 
+			query.append(" AND fun.id=pro.id_funcionario");
+			query.append(" AND UPPER(fun.nome) LIKE UPPER('%" + corretor + "%')"); 
+		}
+
+		query.append(" ORDER BY pro.id ASC");
+
+		PreparedStatement prepared = this.conn.prepareStatement(query.toString());
+		ResultSet resultSet = prepared.executeQuery();
+		
+		List<Proposta> propostaList = new ArrayList<Proposta>();
+		while (resultSet.next())
+		{
+			Proposta proposta = new Proposta();
+			proposta.setId(resultSet.getInt("id"));
+			proposta.setId_cliente(resultSet.getInt("id_cliente"));
+			proposta.setId_funcionario(resultSet.getInt("id_funcionario"));
+			proposta.setValor(resultSet.getDouble("valor"));
+			proposta.setData_inicio(resultSet.getDate("data_inicio"));
+			proposta.setData_fim(resultSet.getDate("data_fim"));
+			proposta.setData_proposta(resultSet.getDate("data_proposta"));
+			proposta.setData_venc_proposta(resultSet.getDate("data_venc_proposta"));
+			proposta.setDesconto(resultSet.getDouble("desconto"));
+
+			//Adiciona funcionario na lista de retorno
+			propostaList.add(proposta);
+		}
+		prepared.close();
+		resultSet.close();
+		return propostaList;
+	}
+	
+	public Proposta pesquisaPropostaPorID(int id) throws SQLException
+	{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from proposta where id = " + id);
+		ResultSet resultSet = prepared.executeQuery();
+		
+		Proposta proposta = new Proposta();
+		while (resultSet.next())
+		{
+			proposta.setId(resultSet.getInt("id"));
+			proposta.setId_cliente(resultSet.getInt("id_cliente"));
+			proposta.setId_funcionario(resultSet.getInt("id_funcionario"));
+			proposta.setValor(resultSet.getDouble("valor"));
+			proposta.setData_inicio(resultSet.getDate("data_inicio"));
+			proposta.setData_fim(resultSet.getDate("data_fim"));
+			proposta.setData_proposta(resultSet.getDate("data_proposta"));
+			proposta.setData_venc_proposta(resultSet.getDate("data_venc_proposta"));
+			proposta.setDesconto(resultSet.getDouble("desconto"));
+		}
+		prepared.close();
+		resultSet.close();
+		
+		return proposta;
+	}
+	
+	public void excluiProposta(int id) throws SQLException
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("delete from proposta where id in (" + id + ")");
+		
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro deletado: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	public void insereProposta(Proposta proposta) throws SQLException
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		//Identifica se é insert ou update
+		boolean isInsert = (proposta.getId() == null ? true : false);
+
+		if(isInsert)
+		{
+			sb.append(" insert into PROPOSTA (id, id_cliente, id_funcionario, data_venc_proposta, data_inicio, data_fim, data_proposta, valor, desconto) ");
+			sb.append(" values ("
+					+ "nextval('ID_IMOVEL'), "
+				    + proposta.getId_cliente() + ", "
+				    + proposta.getId_funcionario() + ", "
+				    + ((proposta.getData_venc_proposta()!=null) ? "'" + DataUtil.toString(proposta.getData_venc_proposta(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + ((proposta.getData_inicio()!=null) ? "'" + DataUtil.toString(proposta.getData_inicio(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + ((proposta.getData_fim()!=null) ? "'" + DataUtil.toString(proposta.getData_fim(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + ((proposta.getData_proposta()!=null) ? "'" + DataUtil.toString(proposta.getData_proposta(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + proposta.getValor() + ", "
+					+ proposta.getDesconto() + ");");
+		}
+		else
+		{
+			sb.append(" update PROPOSTA set "
+				    + " id_cliente=" + proposta.getId_cliente() + ", "
+				    + " id_funcionario=" + proposta.getId_funcionario() + ", "
+				    + " data_venc_proposta=" + ((proposta.getData_venc_proposta()!=null) ? "'" + DataUtil.toString(proposta.getData_venc_proposta(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + " data_inicio=" + ((proposta.getData_inicio()!=null) ? "'" + DataUtil.toString(proposta.getData_inicio(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + " data_fim=" + ((proposta.getData_fim()!=null) ? "'" + DataUtil.toString(proposta.getData_fim(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + " data_proposta=" + ((proposta.getData_proposta()!=null) ? "'" + DataUtil.toString(proposta.getData_proposta(), "yyyy-MM-dd") + "'" : null) + ", "
+				    + " valor=" + proposta.getValor() + ", "
+				    + " desconto=" + proposta.getDesconto());
+			sb.append(" where id = " + proposta.getId());
+		}
+
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	public List<Funcionario> obtemTodosFuncionarios() throws SQLException
+	{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from funcionario order by nome asc");
+		ResultSet resultSet = prepared.executeQuery();
+		
+		List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
+		while (resultSet.next()) 
+		{
+			Funcionario funcionario = new Funcionario();
+			funcionario.setCpf(resultSet.getString("CPF"));
+			funcionario.setDataNascimento(resultSet.getDate(("DATA_NASC")));
+			funcionario.setEmail(resultSet.getString("EMAIL"));
+			funcionario.setEndereco(resultSet.getString("ENDERECO"));
+			funcionario.setID(resultSet.getInt("ID"));
+			funcionario.setLogin(resultSet.getString("LOGIN"));
+			funcionario.setNome(resultSet.getString("NOME"));
+			funcionario.setRg(resultSet.getString("RG"));
+			funcionario.setSenha(resultSet.getString("SENHA"));
+			funcionario.setTelefone(resultSet.getString("TELEFONE"));
+			
+			//Adiciona funcionario na lista de retorno
+			funcionarioList.add(funcionario);
+		}
+		prepared.close();
+		resultSet.close();
+		return funcionarioList;
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

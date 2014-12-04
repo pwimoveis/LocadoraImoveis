@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.conexao.ConexaoBD;
 import br.com.model.Cliente;
+import br.com.model.Funcionario;
 import br.com.utils.DataUtil;
 
 /**
@@ -169,6 +170,56 @@ public class ClienteController extends HttpServlet {
 			request.getRequestDispatcher("cadastrocliente.jsp").forward(request, response);
 
 		} 
+	}
+	
+	public static List<Cliente> getClientes()
+	{
+		List<Cliente> clientes = new ArrayList<Cliente>();
+		try 
+		{
+			ConexaoBD conexaoBD = new ConexaoBD();
+			clientes = conexaoBD.consultaCliente(null, null, null);
+			conexaoBD.closeConnection();
+		} 
+		catch (Exception e1) 
+		{ e1.printStackTrace(); }
+		return clientes;
+	}
+	
+	public static String getNomeCliente(int id)
+	{
+		String nome = "";
+		try 
+		{
+			ConexaoBD conexaoBD = new ConexaoBD();
+			Cliente cliente = conexaoBD.pesquisaClientePorID(id);
+			if(cliente!=null)
+			{
+				nome = cliente.getNome();
+			}
+			conexaoBD.closeConnection();
+		} 
+		catch (Exception e1) 
+		{ e1.printStackTrace(); }
+		return nome;
+	}
+	
+	public static String getNomeFuncionario(int id)
+	{
+		String nome = "";
+		try 
+		{
+			ConexaoBD conexaoBD = new ConexaoBD();
+			Funcionario funcionario = conexaoBD.pesquisaFuncionarioPorID(id);
+			if(funcionario!=null)
+			{
+				nome = funcionario.getNome();
+			}
+			conexaoBD.closeConnection();
+		} 
+		catch (Exception e1) 
+		{ e1.printStackTrace(); }
+		return nome;
 	}
 
 	/**

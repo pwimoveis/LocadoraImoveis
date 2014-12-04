@@ -61,7 +61,7 @@
 		<table>
 			<tr>
 				<td> &nbsp;&nbsp;Código Imóvel: </td>
-				<td><input type="text" size="15" name="codigo" readonly value="<%=(request.getAttribute("codigo") != null) ? request.getAttribute("codigo") : ""%>" readonly?>
+				<td><input type="text" size="15" name="codigo" readonly value="<%=(request.getAttribute("codigo") != null) ? request.getAttribute("codigo") : ""%>" /> </td>
 			</tr>
 			<tr>
 				<td> &nbsp;&nbsp;Endereço: </td>

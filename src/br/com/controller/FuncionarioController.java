@@ -1,14 +1,11 @@
 package br.com.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -173,6 +170,20 @@ public class FuncionarioController extends HttpServlet {
 			request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
 
 		} 
+	}
+	
+	public static List<Funcionario> getFuncionarios()
+	{
+		List<Funcionario> funcionarios = new ArrayList<Funcionario>();
+		try 
+		{
+			ConexaoBD conexaoBD = new ConexaoBD();
+			funcionarios = conexaoBD.obtemTodosFuncionarios();
+			conexaoBD.closeConnection();
+		} 
+		catch (Exception e1) 
+		{ e1.printStackTrace(); }
+		return funcionarios;
 	}
 
 	/**
