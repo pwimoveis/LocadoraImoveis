@@ -9,6 +9,7 @@ import java.util.List;
 
 import br.com.model.Cliente;
 import br.com.model.Funcionario;
+import br.com.model.Imovel;
 import br.com.utils.DataUtil;
 
 public class ConexaoBD {
@@ -24,7 +25,7 @@ public class ConexaoBD {
 		super();
 		FactoryConnection factoryConnection = new FactoryConnection();
 		Class.forName("org.postgresql.Driver");
-		this.conn = factoryConnection.getConexao("5432", "postgres", "postgres", "admin");
+		this.conn = factoryConnection.getConexao("5432", "li", "postgres", "postgres");
 	}
 	
 	public void closeConnection() throws SQLException{
@@ -185,15 +186,14 @@ public class ConexaoBD {
 		return clienteList;
 	}
 	
-	public Cliente pesquisaClientePorID(int id) throws SQLException{
+	public Cliente pesquisaClientePorID(int id) throws SQLException
+	{
 		PreparedStatement prepared = this.conn.prepareStatement("select * from cliente where id = " + id);
 		ResultSet resultSet = prepared.executeQuery();
 		
 		Cliente cliente = new Cliente();
-		int i = 0;
-		while (resultSet.next()) {
-			i++;
-			
+		while (resultSet.next())
+		{
 			cliente.setID(resultSet.getInt("id"));
 			cliente.setTipo_pessoa(resultSet.getString("tipo_pessoa"));
 			cliente.setNome(resultSet.getString("nome"));
@@ -235,6 +235,106 @@ public class ConexaoBD {
 			sb.append(" update CLIENTE set tipo_pessoa = '" + cliente.getTipo_pessoa() + "', data_nasc = " + ((cliente.getData_nasc()!=null) ? "'" + DataUtil.toString(cliente.getData_nasc(), "yyyy-MM-dd") + "'" : null) + ", email = '" + cliente.getEmail() + "', ENDERECO = '" + cliente.getEndereco() +
 					"', NOME = '" + cliente.getNome() + "', RG = '" + cliente.getRg() + "', cpf_cnpj = '" + cliente.getCpf_cnpj() + "', TELEFONE = '" + cliente.getTelefone() + "'");
 			sb.append(" where ID = " + cliente.getID());
+		}
+
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	///IMOVEL
+	public List<Imovel> consultaImovel(Integer codigo, String endereco) throws SQLException
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM imovel");
+		query.append(" WHERE id IS NOT NULL");
+		
+		if(codigo!=null)
+		{ query.append(" AND id = " + codigo); }
+	
+		if(endereco!=null && endereco.trim().length()>0)
+		{ query.append(" AND UPPER(endereco) LIKE UPPER('%" + endereco + "%')"); }
+	
+		query.append(" ORDER BY id ASC");
+
+		PreparedStatement prepared = this.conn.prepareStatement(query.toString());
+		ResultSet resultSet = prepared.executeQuery();
+		
+		List<Imovel> imovelList = new ArrayList<Imovel>();
+		
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+			Imovel imovel = new Imovel();
+			imovel.setID(resultSet.getInt("id"));
+			imovel.setTipo_imovel(resultSet.getInt("tipo_imovel"));
+			imovel.setEndereco(resultSet.getString("endereco"));
+			imovel.setDescricao(resultSet.getString("descricao"));
+			imovel.setComodos(resultSet.getInt("comodos"));
+			imovel.setId_status(resultSet.getInt("id_status"));
+			
+			//Adiciona funcionario na lista de retorno
+			imovelList.add(imovel);
+		}
+		prepared.close();
+		resultSet.close();
+		
+		if(i < 1){
+			System.out.println("Nenhum registro encontrado.");
+		}
+		return imovelList;
+	}
+	
+	public Imovel pesquisaImovelPorID(int id) throws SQLException{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from imovel where id = " + id);
+		ResultSet resultSet = prepared.executeQuery();
+		
+		Imovel imovel = new Imovel();
+		while (resultSet.next())
+		{
+			imovel.setID(resultSet.getInt("id"));
+			imovel.setTipo_imovel(resultSet.getInt("tipo_imovel"));
+			imovel.setEndereco(resultSet.getString("endereco"));
+			imovel.setDescricao(resultSet.getString("descricao"));
+			imovel.setComodos(resultSet.getInt("comodos"));
+			imovel.setId_status(resultSet.getInt("id_status"));
+		}
+		prepared.close();
+		resultSet.close();
+		
+		return imovel;
+	}
+	
+	public void excluiImovel(int id) throws SQLException
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("delete from imovel where id in (" + id + ")");
+		
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro deletado: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	public void insereImovel(Imovel imovel) throws SQLException
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		//Identifica se é insert ou update
+		boolean isInsert = (imovel.getID() == null ? true : false);
+
+		if(isInsert){
+			sb.append(" insert into IMOVEL (id, tipo_imovel, endereco, descricao, comodos, id_status) ");
+			sb.append(" values (nextval('ID_IMOVEL'), " + imovel.getTipo_imovel() + ", '" + imovel.getEndereco() + "', '" + imovel.getDescricao() + 
+					"', '" + imovel.getComodos() + "', " + imovel.getId_status() + ");");
+
+		}else{
+			sb.append(" update IMOVEL set tipo_imovel = '" + imovel.getTipo_imovel() + "', endereco = " + imovel.getEndereco() + ", descricao = '" + imovel.getDescricao() +
+					"', comodos = '" + imovel.getComodos() + "', id_status = '" + imovel.getId_status());
+			sb.append(" where ID = " + imovel.getID());
 		}
 
 		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());

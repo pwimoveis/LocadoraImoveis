@@ -1,14 +1,10 @@
 package br.com.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.conexao.ConexaoBD;
 import br.com.model.Cliente;
-import br.com.model.Funcionario;
 import br.com.utils.DataUtil;
 
 /**
@@ -53,14 +48,15 @@ public class ClienteController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		//ACAO PESQUISAR
-		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("PESQUISAR")){
+		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("PESQUISAR"))
+		{
 			List<Cliente> clienteList = new ArrayList<Cliente>();
 
-			try {
-				
+			try 
+			{
 				String nome = request.getParameter("nome");
 				String rg = request.getParameter("rg");
 				String cpf = request.getParameter("cpfcnpj");
@@ -68,33 +64,21 @@ public class ClienteController extends HttpServlet {
 				ConexaoBD conexaoBD = new ConexaoBD();
 				clienteList = conexaoBD.consultaCliente(nome, rg, cpf);
 				conexaoBD.closeConnection();
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
+			catch (Exception e1) 
+			{ e1.printStackTrace(); }
 
 			request.setAttribute("clienteListRequest", clienteList);
 			request.setAttribute("nome", request.getParameter("nome"));
 			request.setAttribute("rg", request.getParameter("rg"));
-
-			/*
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("consultafuncionario.jsp");
-		rd.forward(request, response);
-			 */
-
-			//		Enumeration e = request.getAttributeNames();
-			//	    while (e.hasMoreElements()) {
-			//	      String name = (String) e.nextElement();
-			//	      System.out.println(name + ": " + request.getAttribute(name) + "<BR>");
-			//	    }
-			//	    
+			request.setAttribute("cpfcnpj", request.getParameter("cpfcnpj"));
 
 			request.getRequestDispatcher("consultacliente.jsp").forward(request, response);
-			//Essa linha zera as variaveis do request
-			//response.sendRedirect("consultafuncionario.jsp");
 		}
 		
 		//ACAO EXLUIR
-		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("EXCLUIR")){
+		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("EXCLUIR"))
+		{
 			String idCliente = request.getParameter("idAcaoGrid");
 			
 			String nome = request.getParameter("nome");
@@ -102,28 +86,31 @@ public class ClienteController extends HttpServlet {
 			String cpf = request.getParameter("cpfcnpj");
 			
 			List<Cliente> clienteList = new ArrayList<Cliente>();
-			try {
+			try 
+			{
 				ConexaoBD conexaoBD = new ConexaoBD();
 				conexaoBD.excluiCliente(Integer.parseInt(idCliente));
 				clienteList = conexaoBD.consultaCliente(nome, rg, cpf);
 				conexaoBD.closeConnection();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			} 
+			catch (Exception e1) 
+			{ e1.printStackTrace(); }
 
 			request.setAttribute("clienteListRequest", clienteList);
 			request.setAttribute("nome", request.getParameter("nome"));
 			request.setAttribute("rg", request.getParameter("rg"));
+			request.setAttribute("cpfcnpj", request.getParameter("cpfcnpj"));
 
 			request.getRequestDispatcher("consultacliente.jsp").forward(request, response);
 		}
 		
 		//Botão EDITAR e NOVO
-		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("NOVO_EDITAR")){
-
+		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("NOVO_EDITAR"))
+		{
 			List<Cliente> clienteList = new ArrayList<Cliente>();
 			Cliente cliente = new Cliente();
-			try {
+			try 
+			{
 				String nome = request.getParameter("nome");
 				String rg = request.getParameter("rg");
 				String cpf = request.getParameter("cpfcnpj");
@@ -145,13 +132,11 @@ public class ClienteController extends HttpServlet {
 				conexaoBD.insereCliente(cliente);
 				clienteList = conexaoBD.consultaCliente(nome, rg, cpf);
 				conexaoBD.closeConnection();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			} 
+			catch (Exception e1) 
+			{ e1.printStackTrace(); }
 
 			request.setAttribute("clienteListRequest", clienteList);
-
-			//request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
 			
 			//Essa linha zera as variaveis do request
 			response.sendRedirect("consultacliente.jsp");
@@ -162,13 +147,14 @@ public class ClienteController extends HttpServlet {
 
 			String idCliente = request.getParameter("idAcaoGrid");
 			Cliente cliente = new Cliente();
-			try {
+			try 
+			{
 				ConexaoBD conexaoBD = new ConexaoBD();
 				cliente = conexaoBD.pesquisaClientePorID(Integer.parseInt(idCliente));
 				conexaoBD.closeConnection();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			} 
+			catch (Exception e1) 
+			{ e1.printStackTrace(); }
 			
 			request.setAttribute("tipo_pessoa", cliente.getTipo_pessoa());
 			request.setAttribute("nome", cliente.getNome());
