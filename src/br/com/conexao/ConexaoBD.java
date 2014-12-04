@@ -24,7 +24,7 @@ public class ConexaoBD {
 		super();
 		FactoryConnection factoryConnection = new FactoryConnection();
 		Class.forName("org.postgresql.Driver");
-		this.conn = factoryConnection.getConexao("5432", "li", "postgres", "postgres");
+		this.conn = factoryConnection.getConexao("5432", "postgres", "postgres", "admin");
 	}
 	
 	public void closeConnection() throws SQLException{
