@@ -72,10 +72,6 @@
 				<td><input type="text" size="35" name="comodos" value="<%=(request.getAttribute("comodos") != null) ? request.getAttribute("comodos") : ""%>">
 			</tr>
 			<tr>
-				<td> &nbsp;&nbsp;Descrição: </td>
-				<td><input type="text" size="35" name="descricao" value="<%=(request.getAttribute("descricao") != null) ? request.getAttribute("descricao") : ""%>"></td>
-			</tr>
-			<tr>
 				<td> &nbsp;&nbsp;Tipo: </td>
 				<td>
 					<%
@@ -91,6 +87,12 @@
 						}
 						out.print("</select>");
 					%>
+				</td>
+			</tr>
+			<tr>
+				<td> &nbsp;&nbsp;Descrição: </td>
+				<td>
+					<textarea rows="4" cols="50" name="descricao"><%=(request.getAttribute("descricao") != null) ? request.getAttribute("descricao") : ""%></textarea>
 				</td>
 			</tr>
 		</table>
