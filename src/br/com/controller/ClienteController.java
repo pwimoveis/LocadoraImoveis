@@ -157,7 +157,7 @@ public class ClienteController extends HttpServlet {
 			catch (Exception e1) 
 			{ e1.printStackTrace(); }
 			
-			request.setAttribute("tipo_pessoa", cliente.getTipo_pessoa());
+			request.setAttribute("tipopessoa", cliente.getTipo_pessoa());
 			request.setAttribute("nome", cliente.getNome());
 			request.setAttribute("rg", cliente.getRg());
 			request.setAttribute("cpf_cnpj", cliente.getCpf_cnpj());

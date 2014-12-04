@@ -1,3 +1,6 @@
+<%@page import="br.com.utils.auxiliar.TipoPessoa"%>
+<%@page import="br.com.utils.PessoaUtil"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -70,7 +73,21 @@
 			</tr>
 			<tr>
 				<td> &nbsp;&nbsp;Tipo de Pessoa: </td>
-				<td><input type="text" size="35" name="tipopessoa" value="<%=(request.getAttribute("tipopessoa") != null) ? request.getAttribute("tipopessoa") : ""%>"></td>
+				<td>
+					<%
+						List<TipoPessoa> tipos = PessoaUtil.getTiposPessoa();
+						out.print("<select name=\"tipopessoa\">");
+						String tipoSelecionado = (String)request.getAttribute("tipopessoa");
+						for (int i = 0; i < tipos.size(); i++ )
+						{
+							if(tipoSelecionado!=null && tipoSelecionado.equalsIgnoreCase(Integer.toString(i)))
+							{ out.print("  <option value=\"" + i + "\" selected>" + PessoaUtil.tipoToString(i) + "</option>"); }
+							else
+							{ out.print("  <option value=\"" + i + "\">" + PessoaUtil.tipoToString(i) + "</option>"); }
+						}
+						out.print("</select>");
+					%>
+				</td>
 			</tr>
 			<tr>
 				<td> &nbsp;&nbsp;RG: </td>
