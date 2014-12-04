@@ -18,6 +18,7 @@
  	//NOVO: 200
  	//EDITAR: 300
  	//EXCLUIR: 400
+ 	//SALVAR: 500
  	
  	//Metodo executado quando botao editar da grid eh acionado
  	function editar(idElemento){
@@ -127,7 +128,7 @@ if(funcionarioLista != null && funcionarioLista.size() > 0){
 	  for (int i = 0; i < funcionarioLista.size(); i++ ){
 		  out.print("<tr>");
 		  
-		  out.print("<td>"); out.print("<img src=\"imagens/add.gif\" /><img src=\"imagens/add_bw.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
+		  out.print("<td>"); out.print("<img src=\"imagens/add.gif\" onclick=\"editar(" + funcionarioLista.get(i).getID() + ")\" /><img src=\"imagens/add_bw.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getNome()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getRg()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getCpf()); out.print("</td>");
@@ -139,7 +140,7 @@ if(funcionarioLista != null && funcionarioLista.size() > 0){
 		  
 		  out.print("</tr>");
 		  
-		  System.out.println("");		  
+		  System.out.println("");
 		  System.out.print("<tr>");
 		  System.out.println("");
 		  System.out.print("<td>"); System.out.print(funcionarioLista.get(i).getNome()); System.out.print("</td>");

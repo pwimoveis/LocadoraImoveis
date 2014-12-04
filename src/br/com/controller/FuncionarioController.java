@@ -110,19 +110,21 @@ public class FuncionarioController extends HttpServlet {
 			request.getRequestDispatcher("consultafuncionario.jsp").forward(request, response);
 		}
 		
-		//ACAO NOVO
-		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("NOVO")){
+		//Botão EDITAR e NOVO
+		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("NOVO_EDITAR")){
 
 			List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
 			Funcionario funcionario = new Funcionario();
 			try {
 				ConexaoBD conexaoBD = new ConexaoBD();
 				
+				Integer idFuncionario = ((request.getParameter("idEditar") != null && !request.getParameter("idEditar").isEmpty() ? Integer.parseInt(request.getParameter("idEditar")) : null));
+				
 				funcionario.setCpf(request.getParameter("cpf"));
 				funcionario.setDataNascimento(new Date());//datanasc
 				funcionario.setEmail(request.getParameter("email"));
 				funcionario.setEndereco(request.getParameter("endereco"));
-				funcionario.setID(10);
+				funcionario.setID(idFuncionario);
 				funcionario.setLogin(request.getParameter("login"));
 				funcionario.setNome(request.getParameter("nome"));
 				funcionario.setRg(request.getParameter("rg"));
@@ -144,6 +146,33 @@ public class FuncionarioController extends HttpServlet {
 			response.sendRedirect("consultafuncionario.jsp");
 		}
 
+		//ACAO EDITAR. Chamado no clique do icone na grid
+		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("EDITAR")){
+
+			String idFuncionario = request.getParameter("idAcaoGrid");
+			Funcionario funcionario = new Funcionario();
+			try {
+				ConexaoBD conexaoBD = new ConexaoBD();
+				funcionario = conexaoBD.pesquisaFuncionarioPorID(Integer.parseInt(idFuncionario));
+				conexaoBD.closeConnection();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			request.setAttribute("cpf", funcionario.getCpf());
+			request.setAttribute("datanasc", funcionario.getDataNascimento());//datanasc
+			request.setAttribute("email", funcionario.getEmail());
+			request.setAttribute("endereco", funcionario.getEndereco());
+			request.setAttribute("idFuncionarioEditar", funcionario.getID());
+			request.setAttribute("login", funcionario.getLogin());
+			request.setAttribute("nome", funcionario.getNome());
+			request.setAttribute("rg", funcionario.getRg());
+			request.setAttribute("senha", funcionario.getSenha());
+			request.setAttribute("telefone", funcionario.getTelefone());
+
+			request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
+
+		} 
 	}
 
 	/**

@@ -10,20 +10,8 @@
  	//NOVO: 200
  	//EDITAR: 300
  	//EXCLUIR: 400
+ 	//SALVAR: 500
  	
- 	//Metodo executado quando botao editar da grid eh acionado
- 	function editar(idElemento){
- 		var elemGrid = document.getElementById("idAcaoGrid");
- 		elemGrid.value = idElemento;
-		botaoSubmit(300);  
-	}
- 	
- 	//Metodo executado quando botao excluir da grid eh acionado
-	function excluir(idElemento){
-		var elemGrid = document.getElementById("idAcaoGrid");
- 		elemGrid.value = idElemento;
-		botaoSubmit(400);  
-	}
 	
 	function botaoSubmit(botaoAcionado){
 		//Pesquisar
@@ -36,17 +24,17 @@
 			document.getElementById("formFuncionarioNovo").submit();
 		}
 		
-		//Novo
+		//Novo e Editar (tela de cadastro)
 		if(botaoAcionado == 200){
 			//alert('botao novo acionado');
 			var elem = document.getElementById("submitBotoes");
-			elem.value = 'NOVO';
+			elem.value = 'NOVO_EDITAR';
 			
 			//Submit do formulario
 			document.getElementById("formFuncionarioNovo").submit();
 		}
 		
-		//Editar
+		//Editar (tela de consulta - botao grid)
 		if(botaoAcionado == 300){
 			//alert('botao editar acionado');
 			var elem = document.getElementById("submitBotoes");
@@ -65,6 +53,7 @@
 			//Submit do formulario
 			document.getElementById("formFuncionarioNovo").submit();
 		}
+				
 	}
 </script>
 </head>
@@ -73,7 +62,7 @@
 <br></br>
 	<form action="funcionario_controller" method="get" id="formFuncionarioNovo">
 	<input type="hidden" id="submitBotoes" value="" name="submitBotoes" />
-	<input type="hidden" name="idAcaoGrid" id="idAcaoGrid" />
+	<input type="hidden" name="idEditar" id="idEditar" value="<%=(request.getAttribute("idFuncionarioEditar") != null) ? request.getAttribute("idFuncionarioEditar") : ""%>" />
 		<table>
 			<tr>
 				<td> &nbsp;&nbsp;Nome: </td>
@@ -115,7 +104,7 @@
 		<br><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="Salvar" onclick="botaoSubmit(200)" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="Salvar" onclick="botaoSubmit(200)" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
 		 <input type="button" value="Cancelar" onclick="location.href='consultafuncionario.jsp'" />
 	</form>

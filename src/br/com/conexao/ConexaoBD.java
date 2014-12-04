@@ -71,6 +71,30 @@ public class ConexaoBD {
 		return funcionarioList;
 	}
 	
+	public Funcionario pesquisaFuncionarioPorID(int id) throws SQLException{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from funcionario where id = " + id);
+		ResultSet resultSet = prepared.executeQuery();
+		
+		Funcionario funcionario = new Funcionario();
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+			funcionario.setCpf(resultSet.getString("CPF"));
+			funcionario.setDataNascimento(resultSet.getDate(("DATA_NASC")));
+			funcionario.setEmail(resultSet.getString("EMAIL"));
+			funcionario.setEndereco(resultSet.getString("ENDERECO"));
+			funcionario.setID(resultSet.getInt("ID"));
+			funcionario.setLogin(resultSet.getString("LOGIN"));
+			funcionario.setNome(resultSet.getString("NOME"));
+			funcionario.setRg(resultSet.getString("RG"));
+			funcionario.setSenha(resultSet.getString("SENHA"));
+			funcionario.setTelefone(resultSet.getString("TELEFONE"));
+		}
+		prepared.close();
+		resultSet.close();
+		
+		return funcionario;
+	}
 	public void excluiFuncionario(int id) throws SQLException{
 		StringBuilder sb = new StringBuilder();
 		sb.append(" delete from funcionario where id in (" + id + ")");
@@ -83,10 +107,21 @@ public class ConexaoBD {
 	
 	public void insereFuncionario(Funcionario funcionario) throws SQLException{
 		StringBuilder sb = new StringBuilder();
-		sb.append(" insert into FUNCIONARIO ( ID, CPF, DATA_NASC, EMAIL, ENDERECO, LOGIN, NOME, RG, SENHA, TELEFONE ) ");
-		sb.append(" values (nextval('ID_FUNCIONARIO'), '" + funcionario.getCpf() + "', '" + "2000-02-02" + "', '" + funcionario.getEmail() + 
-				"', '" + funcionario.getEndereco() + "', '" + funcionario.getLogin() + "', '" + funcionario.getNome() + "', '" + funcionario.getRg() + "', '" + 
-				funcionario.getSenha() + "', '" + funcionario.getTelefone() + "');");
+		
+		//Identifica se é insert ou update
+		boolean isInsert = (funcionario.getID() == null ? true : false);
+		
+		if(isInsert){
+			sb.append(" insert into FUNCIONARIO ( ID, CPF, DATA_NASC, EMAIL, ENDERECO, LOGIN, NOME, RG, SENHA, TELEFONE ) ");
+			sb.append(" values (nextval('ID_FUNCIONARIO'), '" + funcionario.getCpf() + "', '" + "2000-02-02" + "', '" + funcionario.getEmail() + 
+					"', '" + funcionario.getEndereco() + "', '" + funcionario.getLogin() + "', '" + funcionario.getNome() + "', '" + funcionario.getRg() + "', '" + 
+					funcionario.getSenha() + "', '" + funcionario.getTelefone() + "');");
+
+		}else{
+			sb.append(" update FUNCIONARIO set CPF = '" + funcionario.getCpf() + "', DATA_NASC = '2000-02-02', EMAIL = '" + funcionario.getEmail() + "', ENDERECO = '" + funcionario.getEndereco() +
+					"', LOGIN = '" + funcionario.getLogin() + "', NOME = '" + funcionario.getNome() + "', RG = '" + funcionario.getRg() + "', SENHA = '" + funcionario.getSenha() + "', TELEFONE = '" + funcionario.getTelefone() + "'");
+			sb.append(" where ID = " + funcionario.getID());
+		}
 		
 		
 		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
