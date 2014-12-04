@@ -76,6 +76,8 @@
 			document.getElementById("formFuncionarioPesquisa").submit();
 		}
 	}
+	
+	
 </script>
 </head>
 <body >
@@ -128,11 +130,11 @@ if(funcionarioLista != null && funcionarioLista.size() > 0){
 	  for (int i = 0; i < funcionarioLista.size(); i++ ){
 		  out.print("<tr>");
 		  
-		  out.print("<td>"); out.print("<img src=\"imagens/add.gif\" onclick=\"editar(" + funcionarioLista.get(i).getID() + ")\" /><img src=\"imagens/add_bw.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
+		  out.print("<td style=\"text-align: center\" >"); out.print("<img src=\"imagens/add.gif\" onclick=\"editar(" + funcionarioLista.get(i).getID() + ")\" /><img src=\"imagens/no.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getNome()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getRg()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getCpf()); out.print("</td>");
-		  out.print("<td>"); out.print(funcionarioLista.get(i).getDataNascimento()); out.print("</td>");
+		  out.print("<td>"); out.print(formataData((funcionarioLista.get(i).getDataNascimento() != null ? funcionarioLista.get(i).getDataNascimento().toString() : null))); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getEndereco()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getTelefone()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getLogin()); out.print("</td>");
@@ -163,19 +165,22 @@ if(funcionarioLista != null && funcionarioLista.size() > 0){
 		  System.out.println("");
 	  }
 }
+
+%>
+<%!
+//FormataData de yyyy-mm-dd para dd-mm-yyyy
+public String formataData(String value){
+	if(value != null ){
+		String[] res = value.split("-");
+		value = res[2] + '/' + res[1] + "/" + res[0];
+		System.out.println("Value: " + value);
+		System.out.println("res: " + res[0].toString());
+	}
+	return value;
+}
 %>
  
- <!-- 
-  <tr>
-    <td> OK </td>
-    <td> Renato </td>
-    <td> 1234556 </td>
-    <td> 32948372 </td>
-    <td> 25/02/1989 </td>
-    <td> renato@renato.com </td>
-    <td> Rua B </td>
-  </tr>
--->
+
   </table>
 </form>
 </body>

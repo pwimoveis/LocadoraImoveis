@@ -5,18 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.model.Cliente;
+import br.com.model.Contrato;
 import br.com.model.Funcionario;
 import br.com.model.Imovel;
 import br.com.model.Proposta;
 import br.com.utils.DataUtil;
 
 public class ConexaoBD {
-	
+
 	private Connection conn;
-	
+
 	/**
 	 * Cria a conexão com o banco de dados
 	 * Esta conexão deve ser fechada. Após usada chame o metodo closeConnection()
@@ -28,27 +31,35 @@ public class ConexaoBD {
 		Class.forName("org.postgresql.Driver");
 		this.conn = factoryConnection.getConexao("5432", "postgres", "postgres", "admin");
 	}
-	
+
 	public void closeConnection() throws SQLException{
 		if(this.conn != null){
 			this.conn.close();
 		}
 	}
-	
+
 	public Connection getConn() {
 		return this.conn;
 	}
-	
-	
+
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	///FUNCIONARIO
-	public List<Funcionario> consultaFuncionario() throws SQLException{
-		PreparedStatement prepared = this.conn.prepareStatement("select * from funcionario order by nome asc");
+	public List<Funcionario> consultaFuncionario(String nome, String rg) throws SQLException{
+		String where = "";
+		if(nome != null && !nome.isEmpty()){
+			where = (where != null && !where.isEmpty() ? where + " and nome like '%" + nome + "%' " : " where nome like '%" + nome + "%' " );
+		}
+		if(rg != null && !rg.isEmpty()){
+			where = (where != null && !where.isEmpty() ? where + " and rg = '" + nome + "' " : " where rg = '" + nome + "' " );
+		}
+
+		PreparedStatement prepared = this.conn.prepareStatement("select * from funcionario " + where + " order by nome asc");
 		ResultSet resultSet = prepared.executeQuery();
-		
+
 		List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
-		
+
 		int i = 0;
 		while (resultSet.next()) {
 			i++;
@@ -63,23 +74,23 @@ public class ConexaoBD {
 			funcionario.setRg(resultSet.getString("RG"));
 			funcionario.setSenha(resultSet.getString("SENHA"));
 			funcionario.setTelefone(resultSet.getString("TELEFONE"));
-			
+
 			//Adiciona funcionario na lista de retorno
 			funcionarioList.add(funcionario);
 		}
 		prepared.close();
 		resultSet.close();
-		
+
 		if(i < 1){
 			System.out.println("Nenhum registro encontrado.");
 		}
 		return funcionarioList;
 	}
-	
+
 	public Funcionario pesquisaFuncionarioPorID(int id) throws SQLException{
 		PreparedStatement prepared = this.conn.prepareStatement("select * from funcionario where id = " + id);
 		ResultSet resultSet = prepared.executeQuery();
-		
+
 		Funcionario funcionario = new Funcionario();
 		int i = 0;
 		while (resultSet.next()) {
@@ -97,44 +108,169 @@ public class ConexaoBD {
 		}
 		prepared.close();
 		resultSet.close();
-		
+
 		return funcionario;
 	}
 	public void excluiFuncionario(int id) throws SQLException{
 		StringBuilder sb = new StringBuilder();
 		sb.append(" delete from funcionario where id in (" + id + ")");
-		
+
 		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
 		int registroInserido = prepared.executeUpdate();
 		prepared.close();
 		System.out.println("Registro deletado: " + ((registroInserido == 1) ? "true" : "false"));
 	}
-	
+
 	public void insereFuncionario(Funcionario funcionario) throws SQLException{
 		StringBuilder sb = new StringBuilder();
-		
+
 		//Identifica se é insert ou update
 		boolean isInsert = (funcionario.getID() == null ? true : false);
-		
+
+		String dataFormatada = getDataFormatoString(funcionario.getDataNascimento());
+
 		if(isInsert){
 			sb.append(" insert into FUNCIONARIO ( ID, CPF, DATA_NASC, EMAIL, ENDERECO, LOGIN, NOME, RG, SENHA, TELEFONE ) ");
-			sb.append(" values (nextval('ID_FUNCIONARIO'), '" + funcionario.getCpf() + "', '" + "2000-02-02" + "', '" + funcionario.getEmail() + 
+			sb.append(" values (nextval('ID_FUNCIONARIO'), '" + funcionario.getCpf() + "', '" + dataFormatada + "', '" + funcionario.getEmail() + 
 					"', '" + funcionario.getEndereco() + "', '" + funcionario.getLogin() + "', '" + funcionario.getNome() + "', '" + funcionario.getRg() + "', '" + 
 					funcionario.getSenha() + "', '" + funcionario.getTelefone() + "');");
 
 		}else{
-			sb.append(" update FUNCIONARIO set CPF = '" + funcionario.getCpf() + "', DATA_NASC = '2000-02-02', EMAIL = '" + funcionario.getEmail() + "', ENDERECO = '" + funcionario.getEndereco() +
+			sb.append(" update FUNCIONARIO set CPF = '" + funcionario.getCpf() + "', DATA_NASC = '" + dataFormatada + "', EMAIL = '" + funcionario.getEmail() + "', ENDERECO = '" + funcionario.getEndereco() +
 					"', LOGIN = '" + funcionario.getLogin() + "', NOME = '" + funcionario.getNome() + "', RG = '" + funcionario.getRg() + "', SENHA = '" + funcionario.getSenha() + "', TELEFONE = '" + funcionario.getTelefone() + "'");
 			sb.append(" where ID = " + funcionario.getID());
 		}
-		
-		
+
+
 		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
 		int registroInserido = prepared.executeUpdate();
 		prepared.close();
 		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
 	}
-	
+
+	private String getDataFormatoString(Date data){
+		String dataFormatada = null;
+		if(data != null){
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(data);
+			dataFormatada = String.format("%02d", (cal.get(java.util.Calendar.YEAR))) + "-" + String.format("%02d", (cal.get(java.util.Calendar.MONTH) + 1)) + "-" + String.format("%02d", cal.get(java.util.Calendar.DAY_OF_MONTH));
+		}
+		return dataFormatada;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	///CONTRATO
+	public List<Contrato> consultaContrato(String nome, String numero) throws SQLException{
+		String where = "";
+		if(nome != null && !nome.isEmpty()){
+			where = (where != null && !where.isEmpty() ? where + " and nome like '%" + nome + "%' " : " where nome like '%" + nome + "%' " );
+		}
+		if(numero != null && !numero.isEmpty()){
+			where = (where != null && !where.isEmpty() ? where + " and numero = " + numero + " " : " where numero = " + numero + " " );
+		}
+
+		PreparedStatement prepared = this.conn.prepareStatement("select * from contrato " + where + " order by numero asc");
+		ResultSet resultSet = prepared.executeQuery();
+
+		List<Contrato> contratoList = new ArrayList<Contrato>();
+
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+			Contrato contrato = new Contrato();
+			Funcionario funcionario = new Funcionario();
+			Cliente cliente = new Cliente();
+
+			contrato.setCliente(cliente);
+			contrato.setFuncionario(funcionario);
+			contrato.setId(resultSet.getInt("ID"));
+			contrato.setNumero(resultSet.getInt("NUMERO"));
+			contrato.setDataInicio(resultSet.getDate("DATA_INICIO"));
+			contrato.setDataFim(resultSet.getDate("DATA_FIM"));
+			contrato.setValor(resultSet.getDouble("VALOR"));
+
+			//Adiciona contrato na lista de retorno
+			contratoList.add(contrato);
+		}
+		prepared.close();
+		resultSet.close();
+
+		if(i < 1){
+			System.out.println("Nenhum registro encontrado.");
+		}
+		return contratoList;
+	}
+
+	public Contrato pesquisaContratoPorID(int id) throws SQLException{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from contrato where id = " + id);
+		ResultSet resultSet = prepared.executeQuery();
+
+		Contrato contrato = new Contrato();
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+
+			Funcionario funcionario = new Funcionario();
+			Cliente cliente = new Cliente();
+
+			contrato.setCliente(cliente);
+			contrato.setFuncionario(funcionario);
+			contrato.setId(resultSet.getInt("ID"));
+			contrato.setNumero(resultSet.getInt("NUMERO"));
+			contrato.setDataInicio(resultSet.getDate("DATA_INICIO"));
+			contrato.setDataFim(resultSet.getDate("DATA_FIM"));
+			contrato.setValor(resultSet.getDouble("VALOR"));
+		}
+		prepared.close();
+		resultSet.close();
+
+		return contrato;
+	}
+	public void excluiContrato(int id) throws SQLException{
+		StringBuilder sb = new StringBuilder();
+		sb.append(" delete from contrato where id in (" + id + ")");
+
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro deletado: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+
+	public void insereContrato(Contrato contrato) throws SQLException{
+		StringBuilder sb = new StringBuilder();
+
+		//Identifica se é insert ou update
+		boolean isInsert = (contrato.getId() == null ? true : false);
+
+		String dataFormatadaInicio = getDataFormatoString(contrato.getDataInicio());
+		String dataFormatadaFim    = getDataFormatoString(contrato.getDataFim());
+
+		if(isInsert){
+			sb.append(" insert into CONTRATO ( ID,	NUMERO ,ID_FUNCIONARIO, ID_CLIENTE,	DATA_INICIO, DATA_FIM, VALOR ) ");
+			sb.append(" values (nextval('ID_CONTRATO'), " + contrato.getNumero() + ", " + (contrato.getFuncionario() != null ? contrato.getFuncionario().getID() : null) + ", " + 
+					(contrato.getCliente() != null ? contrato.getCliente().getID() : null) + ", '" + dataFormatadaInicio + "', '" + dataFormatadaFim + "', " +
+					contrato.getValor() + ");");
+
+		}else{
+			sb.append(" update CONTRATO set NUMERO = " + contrato.getNumero() + ", ID_FUNCIONARIO = " + (contrato.getFuncionario() != null ? contrato.getFuncionario().getID() : null) 
+					+ ", ID_CLIENTE = " + (contrato.getCliente() != null ? contrato.getCliente().getID() : null) + ", DATA_INICIO = '" + dataFormatadaInicio +
+					"', DATA_FIM = '" + dataFormatadaFim + "', VALOR = " + contrato.getValor() + " ");
+		}
+
+
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	///CLIENTE

@@ -63,6 +63,20 @@
 	<form action="funcionario_controller" method="get" id="formFuncionarioNovo">
 	<input type="hidden" id="submitBotoes" value="" name="submitBotoes" />
 	<input type="hidden" name="idEditar" id="idEditar" value="<%=(request.getAttribute("idFuncionarioEditar") != null) ? request.getAttribute("idFuncionarioEditar") : ""%>" />
+	<table border="0" style="margin-left: auto; margin-right: auto; text-align: center" width="85%">
+		<tr>
+			<td>
+				<font color="red" size="+1">
+					<%  
+					    if(null!=request.getAttribute("mensagemErro"))
+					    {
+					        out.println(request.getAttribute("mensagemErro"));
+					    }
+					%>
+			</font>
+			</td>
+		</tr>
+	</table>
 		<table>
 			<tr>
 				<td> &nbsp;&nbsp;Nome: </td>

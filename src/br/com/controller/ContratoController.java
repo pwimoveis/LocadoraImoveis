@@ -1,16 +1,12 @@
 package br.com.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,13 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.conexao.ConexaoBD;
-import br.com.model.Funcionario;
+import br.com.model.Contrato;
+import br.com.model.Contrato;
 
-/**
- * Servlet implementation class FuncionarioController
- */
-@WebServlet("/funcionario_controller")
-public class FuncionarioController extends HttpServlet {
+
+@WebServlet("/contrato_controller")
+public class ContratoController extends HttpServlet {
 	
 	public String teste;
 	
@@ -34,7 +29,7 @@ public class FuncionarioController extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FuncionarioController() {
+    public ContratoController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -60,22 +55,22 @@ public class FuncionarioController extends HttpServlet {
 
 		//ACAO PESQUISAR
 		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("PESQUISAR")){
-			List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
+			List<Contrato> contratoList = new ArrayList<Contrato>();
 
 			try {
 				ConexaoBD conexaoBD = new ConexaoBD();
-				funcionarioList = conexaoBD.consultaFuncionario(request.getParameter("nome"), request.getParameter("rg"));
+				contratoList = conexaoBD.consultaContrato(request.getParameter("cliente"), request.getParameter("numero"));
 				conexaoBD.closeConnection();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 
-			request.setAttribute("funcionarioListRequest", funcionarioList);
+			request.setAttribute("contratoListRequest", contratoList);
 			request.setAttribute("nome", request.getParameter("nome"));
 			request.setAttribute("rg", request.getParameter("rg"));
 
 			/*
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("consultafuncionario.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("consultacontrato.jsp");
 		rd.forward(request, response);
 			 */
 
@@ -86,30 +81,30 @@ public class FuncionarioController extends HttpServlet {
 			//	    }
 			//	    
 
-			request.getRequestDispatcher("consultafuncionario.jsp").forward(request, response);
+			request.getRequestDispatcher("consultacontrato.jsp").forward(request, response);
 			//Essa linha zera as variaveis do request
-			//response.sendRedirect("consultafuncionario.jsp");
+			//response.sendRedirect("consultacontrato.jsp");
 		}
 		
 		//ACAO EXLUIR
 		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("EXCLUIR")){
-			String idFuncionario = request.getParameter("idAcaoGrid");
+			String idContrato = request.getParameter("idAcaoGrid");
 			
-			List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
+			List<Contrato> contratoList = new ArrayList<Contrato>();
 			try {
 				ConexaoBD conexaoBD = new ConexaoBD();
-				conexaoBD.excluiFuncionario(Integer.parseInt(idFuncionario));
-				funcionarioList = conexaoBD.consultaFuncionario(request.getParameter("nome"), request.getParameter("rg"));
+				conexaoBD.excluiContrato(Integer.parseInt(idContrato));
+				contratoList = conexaoBD.consultaContrato(request.getParameter("cliente"), request.getParameter("numero"));
 				conexaoBD.closeConnection();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 
-			request.setAttribute("funcionarioListRequest", funcionarioList);
+			request.setAttribute("contratoListRequest", contratoList);
 			request.setAttribute("nome", request.getParameter("nome"));
 			request.setAttribute("rg", request.getParameter("rg"));
 
-			request.getRequestDispatcher("consultafuncionario.jsp").forward(request, response);
+			request.getRequestDispatcher("consultacontrato.jsp").forward(request, response);
 		}
 		
 		//Botão NOVO e EDITAR
@@ -123,75 +118,75 @@ public class FuncionarioController extends HttpServlet {
 				request.setAttribute("datanasc", request.getParameter("datanasc"));//datanasc
 				request.setAttribute("email", request.getParameter("email"));
 				request.setAttribute("endereco", request.getParameter("endereco"));
-				request.setAttribute("idFuncionarioEditar", request.getParameter("idEditar"));
+				request.setAttribute("idContratoEditar", request.getParameter("idEditar"));
 				request.setAttribute("login", request.getParameter("login"));
 				request.setAttribute("nome", request.getParameter("nome"));
 				request.setAttribute("rg", request.getParameter("rg"));
 				request.setAttribute("senha", request.getParameter("senha"));
 				request.setAttribute("telefone", request.getParameter("telefone"));
 				
-				request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
+				request.getRequestDispatcher("cadastrocontrato.jsp").forward(request, response);
 			}else{
 
-				List<Funcionario> funcionarioList = new ArrayList<Funcionario>();
-				Funcionario funcionario = new Funcionario();
+				List<Contrato> contratoList = new ArrayList<Contrato>();
+				Contrato contrato = new Contrato();
 				try {
 					ConexaoBD conexaoBD = new ConexaoBD();
 
-					Integer idFuncionario = ((request.getParameter("idEditar") != null && !request.getParameter("idEditar").isEmpty() ? Integer.parseInt(request.getParameter("idEditar")) : null));
+					Integer idContrato = ((request.getParameter("idEditar") != null && !request.getParameter("idEditar").isEmpty() ? Integer.parseInt(request.getParameter("idEditar")) : null));
 
-					funcionario.setCpf(request.getParameter("cpf"));
-					funcionario.setDataNascimento(getParseData(request.getParameter("datanasc")));//datanasc
-					funcionario.setEmail(request.getParameter("email"));
-					funcionario.setEndereco(request.getParameter("endereco"));
-					funcionario.setID(idFuncionario);
-					funcionario.setLogin(request.getParameter("login"));
-					funcionario.setNome(request.getParameter("nome"));
-					funcionario.setRg(request.getParameter("rg"));
-					funcionario.setSenha(request.getParameter("senha"));
-					funcionario.setTelefone(request.getParameter("telefone"));
+//					contrato.setCpf(request.getParameter("cpf"));
+//					contrato.setDataNascimento(getParseData(request.getParameter("datanasc")));//datanasc
+//					contrato.setEmail(request.getParameter("email"));
+//					contrato.setEndereco(request.getParameter("endereco"));
+//					contrato.setID(idContrato);
+//					contrato.setLogin(request.getParameter("login"));
+//					contrato.setNome(request.getParameter("nome"));
+//					contrato.setRg(request.getParameter("rg"));
+//					contrato.setSenha(request.getParameter("senha"));
+//					contrato.setTelefone(request.getParameter("telefone"));
 
-					conexaoBD.insereFuncionario(funcionario);
-					funcionarioList = conexaoBD.consultaFuncionario(null, null);
+					conexaoBD.insereContrato(contrato);
+					contratoList = conexaoBD.consultaContrato(null, null);
 					conexaoBD.closeConnection();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 
-				request.setAttribute("funcionarioListRequest", funcionarioList);
+				request.setAttribute("contratoListRequest", contratoList);
 
-				//request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
+				//request.getRequestDispatcher("cadastrocontrato.jsp").forward(request, response);
 
 				//Essa linha zera as variaveis do request
-				response.sendRedirect("consultafuncionario.jsp");
+				response.sendRedirect("consultacontrato.jsp");
 			}
 		}
 
 		//ACAO EDITAR. Chamado no clique do icone na grid
 		if(request.getParameter("submitBotoes") != null && request.getParameter("submitBotoes").equals("EDITAR")){
 
-			String idFuncionario = request.getParameter("idAcaoGrid");
-			Funcionario funcionario = new Funcionario();
+			String idContrato = request.getParameter("idAcaoGrid");
+			Contrato contrato = new Contrato();
 			try {
 				ConexaoBD conexaoBD = new ConexaoBD();
-				funcionario = conexaoBD.pesquisaFuncionarioPorID(Integer.parseInt(idFuncionario));
+				contrato = conexaoBD.pesquisaContratoPorID(Integer.parseInt(idContrato));
 				conexaoBD.closeConnection();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 
-			request.setAttribute("cpf", funcionario.getCpf());
-			request.setAttribute("datanasc", formataData((funcionario.getDataNascimento() != null ? funcionario.getDataNascimento().toString() : null)));//datanasc
-			request.setAttribute("email", funcionario.getEmail());
-			request.setAttribute("endereco", funcionario.getEndereco());
-			request.setAttribute("idFuncionarioEditar", funcionario.getID());
-			request.setAttribute("login", funcionario.getLogin());
-			request.setAttribute("nome", funcionario.getNome());
-			request.setAttribute("rg", funcionario.getRg());
-			request.setAttribute("senha", funcionario.getSenha());
-			request.setAttribute("telefone", funcionario.getTelefone());
+//			request.setAttribute("cpf", contrato.getCpf());
+//			request.setAttribute("datanasc", formataData((contrato.getDataNascimento() != null ? contrato.getDataNascimento().toString() : null)));//datanasc
+//			request.setAttribute("email", contrato.getEmail());
+//			request.setAttribute("endereco", contrato.getEndereco());
+//			request.setAttribute("idContratoEditar", contrato.getID());
+//			request.setAttribute("login", contrato.getLogin());
+//			request.setAttribute("nome", contrato.getNome());
+//			request.setAttribute("rg", contrato.getRg());
+//			request.setAttribute("senha", contrato.getSenha());
+//			request.setAttribute("telefone", contrato.getTelefone());
 
-			request.getRequestDispatcher("cadastrofuncionario.jsp").forward(request, response);
+			request.getRequestDispatcher("cadastrocontrato.jsp").forward(request, response);
 
 		} 
 	}
