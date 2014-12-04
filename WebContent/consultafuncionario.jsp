@@ -77,7 +77,7 @@
 	}
 </script>
 </head>
-<body>
+<body >
 <a href="login.jsp"> SAIR </a> 	<center> <b><u> CONSULTAR FUNCIONÁRIO </u></b></center>
 <br></br>
 <br></br>
@@ -85,7 +85,7 @@
 	<input type="hidden" id="submitBotoes" value="" name="submitBotoes" />
 	<input type="hidden" name="idAcaoGrid" id="idAcaoGrid" />
 	
-	<table>
+	<table id="tableFiltro" >
 	<tr>
 		<td> &nbsp;&nbsp;Nome: </td>
 		<td><input type="text" size="35" name="nome" value="<%=(request.getAttribute("nome") != null) ? request.getAttribute("nome") : ""%>" /></td>
@@ -97,7 +97,7 @@
 	</table>
 <br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	&nbsp;&nbsp;&nbsp;
+	&nbsp;
 	<input type="button" onclick="botaoSubmit(100)" value="Pesquisar" name="botaoPesquisarFuncionario" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		&nbsp;&nbsp;&nbsp;
 		<input type="button" value="Novo" onclick="location.href='cadastrofuncionario.jsp'" />
@@ -106,7 +106,7 @@
 		<input type="button" value="Voltar" onclick="location.href='home.jsp'" />
 		
 <br/><br/><br/><br/><br/>
-<table border="1">
+<table id="tableGrid" border="1" style="width: 85%; margin-left: auto; margin-right: auto;">
 
   <tr>
   	<th bgcolor="#EDEDED">Ação</th>
