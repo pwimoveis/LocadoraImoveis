@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.model.Cliente;
 import br.com.model.Funcionario;
+import br.com.utils.DataUtil;
 
 public class ConexaoBD {
 	
@@ -22,7 +24,7 @@ public class ConexaoBD {
 		super();
 		FactoryConnection factoryConnection = new FactoryConnection();
 		Class.forName("org.postgresql.Driver");
-		this.conn = factoryConnection.getConexao("5432", "postgres", "postgres", "admin");
+		this.conn = factoryConnection.getConexao("5432", "li", "postgres", "postgres");
 	}
 	
 	public void closeConnection() throws SQLException{
@@ -34,7 +36,8 @@ public class ConexaoBD {
 	public Connection getConn() {
 		return this.conn;
 	}
-
+	
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	///FUNCIONARIO
@@ -124,6 +127,116 @@ public class ConexaoBD {
 		}
 		
 		
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro inserido: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	///CLIENTE
+	public List<Cliente> consultaCliente(String nome, String rg, String cpfcnpj) throws SQLException
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM cliente");
+		query.append(" WHERE id IS NOT NULL");
+		
+		if(nome!=null && nome.trim().length()>0)
+		{ query.append(" AND UPPER(nome) LIKE UPPER('%" + nome + "%')"); }
+	
+		if(rg!=null && rg.trim().length()>0)
+		{ query.append(" AND UPPER(rg) LIKE UPPER('%" + rg + "%')"); }
+	
+		if(cpfcnpj!=null && cpfcnpj.trim().length()>0)
+		{ query.append(" AND UPPER(cpfcnpj) LIKE UPPER('%" + cpfcnpj + "%')"); }
+	
+		query.append(" ORDER BY nome ASC");
+		
+		
+		PreparedStatement prepared = this.conn.prepareStatement(query.toString());
+		ResultSet resultSet = prepared.executeQuery();
+		
+		List<Cliente> clienteList = new ArrayList<Cliente>();
+		
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+			Cliente cliente = new Cliente();
+			cliente.setID(resultSet.getInt("id"));
+			cliente.setTipo_pessoa(resultSet.getString("tipo_pessoa"));
+			cliente.setNome(resultSet.getString("nome"));
+			cliente.setRg(resultSet.getString("rg"));
+			cliente.setCpf_cnpj(resultSet.getString("cpf_cnpj"));
+			cliente.setEndereco(resultSet.getString("endereco"));
+			cliente.setEmail(resultSet.getString("email"));
+			cliente.setTelefone(resultSet.getString("telefone"));
+			cliente.setData_nasc(resultSet.getDate("data_nasc"));
+			
+			//Adiciona funcionario na lista de retorno
+			clienteList.add(cliente);
+		}
+		prepared.close();
+		resultSet.close();
+		
+		if(i < 1){
+			System.out.println("Nenhum registro encontrado.");
+		}
+		return clienteList;
+	}
+	
+	public Cliente pesquisaClientePorID(int id) throws SQLException{
+		PreparedStatement prepared = this.conn.prepareStatement("select * from cliente where id = " + id);
+		ResultSet resultSet = prepared.executeQuery();
+		
+		Cliente cliente = new Cliente();
+		int i = 0;
+		while (resultSet.next()) {
+			i++;
+			
+			cliente.setID(resultSet.getInt("id"));
+			cliente.setTipo_pessoa(resultSet.getString("tipo_pessoa"));
+			cliente.setNome(resultSet.getString("nome"));
+			cliente.setRg(resultSet.getString("rg"));
+			cliente.setCpf_cnpj(resultSet.getString("cpf_cnpj"));
+			cliente.setEndereco(resultSet.getString("endereco"));
+			cliente.setEmail(resultSet.getString("email"));
+			cliente.setTelefone(resultSet.getString("telefone"));
+			cliente.setData_nasc(resultSet.getDate("data_nasc"));
+		}
+		prepared.close();
+		resultSet.close();
+		
+		return cliente;
+	}
+	public void excluiCliente(int id) throws SQLException{
+		StringBuilder sb = new StringBuilder();
+		sb.append(" delete from cliente where id in (" + id + ")");
+		
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		int registroInserido = prepared.executeUpdate();
+		prepared.close();
+		System.out.println("Registro deletado: " + ((registroInserido == 1) ? "true" : "false"));
+	}
+	
+	public void insereCliente(Cliente cliente) throws SQLException{
+		StringBuilder sb = new StringBuilder();
+		
+		//Identifica se é insert ou update
+		boolean isInsert = (cliente.getID() == null ? true : false);
+		
+		if(isInsert){
+			sb.append(" insert into CLIENTE ( id, tipo_pessoa, nome, rg, cpf_cnpj, endereco, email, telefone, data_nasc ) ");
+			sb.append(" values (nextval('ID_CLIENTE'), '" + cliente.getTipo_pessoa() + "', '" + cliente.getNome() + "', '" + cliente.getRg() + 
+					"', '" + cliente.getCpf_cnpj() + "', '" + cliente.getEndereco() + "', '" + cliente.getEmail() + "', '" + cliente.getTelefone() + "', " + 
+					((cliente.getData_nasc()!=null) ? "'" + DataUtil.toString(cliente.getData_nasc(), "yyyy-MM-dd") + "'" : null) + ");");
+
+		}else{
+			sb.append(" update CLIENTE set tipo_pessoa = '" + cliente.getTipo_pessoa() + "', data_nasc = " + ((cliente.getData_nasc()!=null) ? "'" + DataUtil.toString(cliente.getData_nasc(), "yyyy-MM-dd") + "'" : null) + ", email = '" + cliente.getEmail() + "', ENDERECO = '" + cliente.getEndereco() +
+					"', NOME = '" + cliente.getNome() + "', RG = '" + cliente.getRg() + "', cpf_cnpj = '" + cliente.getCpf_cnpj() + "', TELEFONE = '" + cliente.getTelefone() + "'");
+			sb.append(" where ID = " + cliente.getID());
+		}
+
 		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
 		int registroInserido = prepared.executeUpdate();
 		prepared.close();
