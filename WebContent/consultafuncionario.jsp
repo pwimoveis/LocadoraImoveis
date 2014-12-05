@@ -130,7 +130,7 @@ if(funcionarioLista != null && funcionarioLista.size() > 0){
 	  for (int i = 0; i < funcionarioLista.size(); i++ ){
 		  out.print("<tr>");
 		  
-		  out.print("<td style=\"text-align: center\" >"); out.print("<img src=\"imagens/add.gif\" onclick=\"editar(" + funcionarioLista.get(i).getID() + ")\" /><img src=\"imagens/no.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
+		  out.print("<td style=\"text-align: center\" >"); out.print("<img src=\"imagens/editar.png\" onclick=\"editar(" + funcionarioLista.get(i).getID() + ")\" /><img src=\"imagens/remover.png\" onclick=\"excluir(" + funcionarioLista.get(i).getID() + ")\" />"); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getNome()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getRg()); out.print("</td>");
 		  out.print("<td>"); out.print(funcionarioLista.get(i).getCpf()); out.print("</td>");

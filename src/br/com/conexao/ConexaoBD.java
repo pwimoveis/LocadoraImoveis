@@ -49,7 +49,7 @@ public class ConexaoBD {
 	public List<Funcionario> consultaFuncionario(String nome, String rg) throws SQLException{
 		String where = "";
 		if(nome != null && !nome.isEmpty()){
-			where = (where != null && !where.isEmpty() ? where + " and nome like '%" + nome + "%' " : " where nome like '%" + nome + "%' " );
+			where = (where != null && !where.isEmpty() ? where + " and UPPER(nome) like UPPER('%" + nome + "%') " : " where UPPER(nome like '%" + nome + "%') " );
 		}
 		if(rg != null && !rg.isEmpty()){
 			where = (where != null && !where.isEmpty() ? where + " and rg = '" + nome + "' " : " where rg = '" + nome + "' " );
@@ -167,13 +167,14 @@ public class ConexaoBD {
 	public List<Contrato> consultaContrato(String nome, String numero) throws SQLException{
 		String where = "";
 		if(nome != null && !nome.isEmpty()){
-			where = (where != null && !where.isEmpty() ? where + " and nome like '%" + nome + "%' " : " where nome like '%" + nome + "%' " );
+			where = (where != null && !where.isEmpty() ? where + " and nome like UPPER('%" + nome + "%') " : " and nome like UPPER('%" + nome + "%') " );
 		}
 		if(numero != null && !numero.isEmpty()){
-			where = (where != null && !where.isEmpty() ? where + " and numero = " + numero + " " : " where numero = " + numero + " " );
+			where = (where != null && !where.isEmpty() ? where + " and numero = " + numero + " " : " and numero = " + numero + " " );
 		}
 
-		PreparedStatement prepared = this.conn.prepareStatement("select * from contrato " + where + " order by numero asc");
+		PreparedStatement prepared = this.conn.prepareStatement("select con.*, fun.ID as ID_FUNCIONARIO, fun.nome as NOME_FUNCIONARIO, cli.id as ID_CLIENTE, cli.nome as NOME_CLIENTE, cli.cpf_cnpj as CPF_CNPJ_CLIENTE from contrato con, funcionario fun, cliente cli " + 
+		" where con.id_cliente = cli.id and con.id_funcionario = fun.id " + where + " order by numero asc");
 		ResultSet resultSet = prepared.executeQuery();
 
 		List<Contrato> contratoList = new ArrayList<Contrato>();
@@ -184,6 +185,13 @@ public class ConexaoBD {
 			Contrato contrato = new Contrato();
 			Funcionario funcionario = new Funcionario();
 			Cliente cliente = new Cliente();
+			
+			funcionario.setID(resultSet.getInt("ID_FUNCIONARIO"));
+			funcionario.setNome(resultSet.getString("NOME_FUNCIONARIO"));
+			
+			cliente.setID(resultSet.getInt("ID_CLIENTE"));
+			cliente.setNome(resultSet.getString("NOME_CLIENTE"));
+			cliente.setCpf_cnpj(resultSet.getString("CPF_CNPJ_CLIENTE"));
 
 			contrato.setCliente(cliente);
 			contrato.setFuncionario(funcionario);
@@ -206,7 +214,9 @@ public class ConexaoBD {
 	}
 
 	public Contrato pesquisaContratoPorID(int id) throws SQLException{
-		PreparedStatement prepared = this.conn.prepareStatement("select * from contrato where id = " + id);
+		//PreparedStatement prepared = this.conn.prepareStatement("select * from contrato where id = " + id);
+		PreparedStatement prepared = this.conn.prepareStatement("select con.*, fun.ID as ID_FUNCIONARIO, fun.nome as NOME_FUNCIONARIO, cli.id as ID_CLIENTE, cli.nome as NOME_CLIENTE, cli.cpf_cnpj as CPF_CNPJ_CLIENTE from contrato con, funcionario fun, cliente cli " + 
+				" where con.id = " + id + " and con.id_cliente = cli.id and con.id_funcionario = fun.id order by numero asc");
 		ResultSet resultSet = prepared.executeQuery();
 
 		Contrato contrato = new Contrato();
@@ -216,6 +226,9 @@ public class ConexaoBD {
 
 			Funcionario funcionario = new Funcionario();
 			Cliente cliente = new Cliente();
+			
+			funcionario.setID(resultSet.getInt("ID_FUNCIONARIO"));
+			funcionario.setNome(resultSet.getString("NOME_FUNCIONARIO"));
 
 			contrato.setCliente(cliente);
 			contrato.setFuncionario(funcionario);
@@ -259,6 +272,7 @@ public class ConexaoBD {
 			sb.append(" update CONTRATO set NUMERO = " + contrato.getNumero() + ", ID_FUNCIONARIO = " + (contrato.getFuncionario() != null ? contrato.getFuncionario().getID() : null) 
 					+ ", ID_CLIENTE = " + (contrato.getCliente() != null ? contrato.getCliente().getID() : null) + ", DATA_INICIO = '" + dataFormatadaInicio +
 					"', DATA_FIM = '" + dataFormatadaFim + "', VALOR = " + contrato.getValor() + " ");
+			sb.append(" where ID = " + contrato.getId());
 		}
 
 
