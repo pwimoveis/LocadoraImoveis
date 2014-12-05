@@ -104,7 +104,6 @@
     <th bgcolor="#EDEDED">Corretor</th>
     <th bgcolor="#EDEDED">Data Vencimento</th>
     <th bgcolor="#EDEDED">Data Inicio</th>
-    <th bgcolor="#EDEDED">Data Fim</th>
     <th bgcolor="#EDEDED">Valor</th>
     <th bgcolor="#EDEDED">Desconto</th>
   </tr>
@@ -127,7 +126,7 @@ if(propostaLista != null)
 		  out.print("<td>"); out.print(ClienteController.getNomeFuncionario(propostaLista.get(i).getId_funcionario())); out.print("</td>");
 		  out.print("<td>"); out.print(DataUtil.toString(propostaLista.get(i).getData_venc_proposta(), "dd/MM/yyyy")); out.print("</td>");
 		  out.print("<td>"); out.print(DataUtil.toString(propostaLista.get(i).getData_inicio(), "dd/MM/yyyy")); out.print("</td>");
-		  out.print("<td>"); out.print(DataUtil.toString(propostaLista.get(i).getData_fim(), "dd/MM/yyyy")); out.print("</td>");
+		  //out.print("<td>"); out.print(DataUtil.toString(propostaLista.get(i).getData_fim(), "dd/MM/yyyy")); out.print("</td>");
 		  out.print("<td>"); out.print(propostaLista.get(i).getValor()); out.print("</td>");
 		  out.print("<td>"); out.print(propostaLista.get(i).getDesconto()); out.print("</td>");
 		  out.print("</tr>");
