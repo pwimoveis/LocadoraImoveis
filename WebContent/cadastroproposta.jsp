@@ -102,7 +102,7 @@
 				<td><input type="text" size="35" name="datainicio" value="<%=(request.getAttribute("datainicio") != null) ? request.getAttribute("datainicio") : ""%>">
 			</tr>
 			<tr>
-				<td> &nbsp;&nbsp;Data Fim: </td>
+				<td> &nbsp;&nbsp;Data Vencimento: </td>
 				<td><input type="text" size="35" name="vencproposta" value="<%=(request.getAttribute("vencproposta") != null) ? request.getAttribute("vencproposta") : ""%>"></td>
 			</tr>
 			<tr>
