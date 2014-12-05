@@ -195,6 +195,20 @@ public class FuncionarioController extends HttpServlet {
 
 		} 
 	}
+	
+	public static List<Funcionario> getFuncionarios()
+	{
+		List<Funcionario> funcionarios = new ArrayList<Funcionario>();
+		try 
+		{
+			ConexaoBD conexaoBD = new ConexaoBD();
+			funcionarios = conexaoBD.obtemTodosFuncionarios();
+			conexaoBD.closeConnection();
+		} 
+		catch (Exception e1) 
+		{ e1.printStackTrace(); }
+		return funcionarios;
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

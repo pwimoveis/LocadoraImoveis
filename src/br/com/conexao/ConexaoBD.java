@@ -652,6 +652,24 @@ public class ConexaoBD {
 		return funcionarioList;
 	}
 	
+	public boolean verificaLogin(String login, String senha) throws SQLException
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM Funcionario WHERE login='" + login + "' AND senha='" + senha + "'");
+		
+		PreparedStatement prepared = this.conn.prepareStatement(sb.toString());
+		ResultSet resultSet = prepared.executeQuery();
+
+		int resultados = 0;
+		while (resultSet.next())
+		{
+			resultados++;
+		}
+		prepared.close();
+		
+		return resultados>0;
+	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	
